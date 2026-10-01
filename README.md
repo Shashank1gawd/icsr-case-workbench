@@ -11,7 +11,7 @@ A single-file, browser-based workbench that walks through **pharmacovigilance ca
 ## Live demo
 
 After you enable GitHub Pages (see [Deploy](#deploy-on-github-pages)):
-`https://YOUR-USERNAME.github.io/icsr-case-workbench/`
+`https://Shashank1gawd.github.io/icsr-case-workbench/`
 
 ## Use case
 
@@ -106,4 +106,4 @@ MIT, see [LICENSE](LICENSE).
 
 ## Author
 
-YOUR NAME · [LinkedIn](https://www.linkedin.com/in/YOUR-PROFILE) · [GitHub](https://github.com/YOUR-USERNAME)
+Shashank Gautam · [LinkedIn](www.linkedin.com/in/shashank-gautam2004) · [GitHub](https://github.com/Shashank1gawd)
