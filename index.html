@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ICSR Case Workbench</title>
+<style>
+:root{--paper:#F6F4EE;--ink:#16241F;--teal:#2E7D6B;--amber:#C97B3D;--red:#B3452C;--line:#D8D2C4;--card:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--paper:#12181A;--ink:#E9E6DD;--teal:#5FBFA6;--amber:#E0995C;--red:#E07A5F;--line:#31403C;--card:#1B2426}}
+:root[data-theme="dark"]{--paper:#12181A;--ink:#E9E6DD;--teal:#5FBFA6;--amber:#E0995C;--red:#E07A5F;--line:#31403C;--card:#1B2426}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;line-height:1.55}
+header,main{max-width:900px;margin:0 auto;padding:0 1.1rem}header{padding-top:1.8rem;padding-bottom:.5rem}main{padding-bottom:3rem}
+h1{font-size:1.5rem;margin:0 0 .35rem}h3{margin:.2rem 0 .5rem;font-size:1rem}.sub{opacity:.75;margin:0;font-size:.92rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:6px;padding:1.05rem;margin-bottom:.9rem;animation:in .25s ease}
+@keyframes in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.warn{background:rgba(201,123,61,.14);border:1px solid var(--amber);border-radius:4px;padding:.65rem .85rem;font-size:.84rem;margin-bottom:.9rem}
+.tabs{display:flex;gap:.4rem;margin-bottom:.9rem;flex-wrap:wrap}
+.tab{padding:.45rem .9rem;border:1px solid var(--line);border-radius:20px;cursor:pointer;font:inherit;font-size:.86rem;background:transparent;color:var(--ink);transition:.15s}
+.tab.active{background:var(--teal);color:#fff;border-color:var(--teal)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.field{display:flex;flex-direction:column;gap:.22rem}.field label{font-size:.76rem;opacity:.75}.full{grid-column:1/-1}
+input[type=text],input[type=date],select,textarea{font:inherit;padding:.5rem;border:1px solid var(--line);border-radius:4px;background:var(--paper);color:var(--ink);width:100%;transition:border .15s}
+input:focus,select:focus{outline:none;border-color:var(--teal)}
+.checks{display:flex;flex-wrap:wrap;gap:.45rem}.checks label{display:flex;gap:.35rem;align-items:center;font-size:.84rem;border:1px solid var(--line);border-radius:14px;padding:.25rem .7rem;cursor:pointer}
+button.run{font:inherit;padding:.5rem 1rem;border-radius:4px;border:1px solid var(--teal);background:var(--teal);color:#fff;cursor:pointer;font-size:.88rem}
+button.ghost{background:transparent;color:var(--teal)}button.mini{font:inherit;font-size:.72rem;border:1px solid var(--teal);color:var(--teal);background:transparent;border-radius:4px;padding:.14rem .45rem;cursor:pointer;margin-right:.3rem}
+.btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.8rem}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden;margin:.4rem 0}.bar div{height:100%;background:var(--teal);width:0;transition:width .3s}
+.pill{display:inline-block;font-size:.76rem;padding:.12rem .55rem;border-radius:10px;background:rgba(46,125,107,.18);color:var(--teal);font-weight:600}
+.pill.a{background:rgba(201,123,61,.2);color:var(--amber)}.pill.r{background:rgba(179,69,44,.18);color:var(--red)}
+.q{padding:.55rem 0;border-bottom:1px solid var(--line);font-size:.86rem}.q:last-child{border:0}
+.opts{display:flex;gap:.9rem;margin-top:.25rem}.opts label{display:flex;gap:.3rem;align-items:center;cursor:pointer;font-size:.83rem}
+.big{font-size:1.8rem;font-weight:700}.note{font-size:.78rem;opacity:.65;margin:.5rem 0 0}
+.formula{margin:.3rem 0;padding:.5rem .65rem;background:rgba(46,125,107,.08);border-radius:4px;font-size:.88rem}
+.narr{white-space:pre-wrap;background:var(--paper);border:1px solid var(--line);border-radius:4px;padding:.8rem;font-size:.87rem}
+table{width:100%;border-collapse:collapse;font-size:.83rem}th,td{padding:.45rem;border-bottom:1px solid var(--line);text-align:left}th{opacity:.75}
+.scroll{overflow-x:auto}details{margin:.4rem 0}summary{cursor:pointer;font-weight:600;font-size:.9rem}details p{font-size:.86rem;margin:.4rem 0}
+.sec{display:none}.sec.on{display:block}
+.flow{display:flex;gap:.3rem;flex-wrap:wrap;margin-bottom:.8rem;font-size:.76rem}.flow span{padding:.2rem .6rem;border-radius:12px;border:1px solid var(--line);opacity:.7}.flow .g{background:rgba(46,125,107,.18);color:var(--teal);border-color:var(--teal);opacity:1}.flow .y{background:rgba(201,123,61,.2);color:var(--amber);border-color:var(--amber);opacity:1}.tl{border-left:2px solid var(--teal);padding-left:.8rem;margin-left:.3rem}.tl div{margin:.35rem 0;font-size:.86rem}.prow{display:grid;grid-template-columns:.9fr 1.3fr 1fr auto;gap:.4rem;margin-top:.4rem}@media(max-width:600px){.prow{grid-template-columns:1fr 1fr}}ol{padding-left:1.2rem;font-size:.86rem}
+.flt{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.7rem}@media(max-width:600px){.flt{grid-template-columns:1fr 1fr}}
+.src{font-size:.68rem;margin-left:.4rem;padding:.02rem .4rem;border-radius:8px;background:rgba(46,125,107,.15);color:var(--teal);font-weight:600}.src.i{background:rgba(201,123,61,.2);color:var(--amber)}.src.m{background:var(--line);color:var(--ink);opacity:.8}
+</style></head><body>
+<header><h1>🗂️ ICSR Case Workbench</h1>
+<p class="sub">Process an adverse-event report the way a safety team does: intake, completeness, seriousness, causality, reporting deadline and narrative.</p></header>
+<main>
+<div class="warn"><b>Educational prototype: not for clinical, regulatory, or patient-care decisions.</b> Verify all imported and inferred information against the original source before use. Use fictional or de-identified data only. Never enter real patient-identifiable information. Deadlines follow common ICH/EU/FDA conventions; always check your local regulation.</div>
+<div class="flow" id="flow"></div><div class="tabs" id="tabs">
+<button class="tab" data-t="sg">🔗 Signal</button><button class="tab active" data-t="intake">📝 Intake</button><button class="tab" data-t="cod">🧬 Coding</button><button class="tab" data-t="caus">⚖️ Causality</button>
+<button class="tab" data-t="rep">📋 Assessment &amp; Reporting</button><button class="tab" data-t="qc">✅ QC &amp; Audit</button><button class="tab" data-t="log">📚 Case log</button><button class="tab" data-t="learn">📘 Learn</button></div>
+
+<section id="sg" class="sec card"><h3>Signal investigation</h3><div id="sgh"></div><div id="sgm" style="display:flex;gap:1.3rem;flex-wrap:wrap;margin:.6rem 0"></div>
+<textarea id="sgin" style="height:70px" placeholder="Paste the case set copied from Project 1 (Signal Detection)"></textarea>
+<div class="btns"><button class="run" id="sgload">Load signal cases</button><button class="run ghost" id="sgfb">Copy feedback for Project 1</button></div><textarea id="sgout" style="display:none;height:70px;margin-top:.5rem"></textarea><p class="note" id="sgmsg"></p><div class="scroll" id="sgt"></div></section>
+<section id="intake" class="sec on card"><div id="srcb" class="warn" style="display:none"></div>
+<div class="grid">
+<div class="field"><label>Patient (initials / age / sex — any one identifies)</label><input type="text" id="pat" placeholder="e.g. F, 54 y"></div>
+<div class="field"><label>Reporter</label><select id="rpt"><option value="">— select —</option><option>Physician</option><option>Pharmacist</option><option>Other healthcare professional</option><option>Consumer</option><option>Lawyer</option></select></div>
+<div class="field"><label>Suspect drug</label><input type="text" id="drug" placeholder="e.g. Drug X 10 mg tablets"></div>
+<div class="field"><label>Dose / route</label><input type="text" id="dose" placeholder="e.g. 10 mg daily, oral"></div>
+<div class="field"><label>Indication</label><input type="text" id="ind" placeholder="e.g. hypertension"></div>
+<div class="field"><label>Adverse event (reported term)</label><input type="text" id="ev" placeholder="e.g. angioedema"></div>
+<div class="field"><label>Drug start date</label><input type="date" id="ds"></div>
+<div class="field"><label>Drug stop date</label><input type="date" id="de"></div>
+<div class="field"><label>Event onset date</label><input type="date" id="eo"></div>
+<div class="field"><label>Day 0: date company first received valid info</label><input type="date" id="d0"></div>
+<div class="field"><label>Outcome</label><select id="out"><option>Unknown</option><option>Recovered</option><option>Recovering</option><option>Not recovered</option><option>Recovered with sequelae</option><option>Fatal</option></select></div>
+<div class="field"><label>Setting</label><select id="set"><option value="pm">Post-marketing</option><option value="ct">Clinical trial</option></select></div>
+<div class="field"><label>Expectedness (vs. reference safety information)</label><select id="exp"><option value="u">Unexpected</option><option value="e">Expected (listed)</option></select></div>
+<div class="field"><label>Recovery / outcome date</label><input type="date" id="rdt"></div><div class="field"><label>Dechallenge (event after stopping drug)</label><select id="dch"><option>Unknown</option><option>Positive</option><option>Negative</option><option>Not applicable</option></select></div><div class="field"><label>Rechallenge (event on restarting)</label><select id="rch"><option>Unknown</option><option>Positive</option><option>Negative</option><option>Not applicable</option></select></div><div class="field"><label>Laboratory results</label><input type="text" id="lab" placeholder="e.g. ALT 220 U/L"></div><div class="field"><label>Relevant medical history</label><input type="text" id="hist" placeholder="e.g. fatty liver"></div><div class="field"><label>Treatment given for event</label><input type="text" id="trt" placeholder="e.g. steroids"></div><div class="field full"><label>Seriousness criteria (tick all that apply)</label>
+<div class="checks" id="ser"><label><input type="checkbox" value="Death">Death</label><label><input type="checkbox" value="Life-threatening">Life-threatening</label><label><input type="checkbox" value="Hospitalisation">Hospitalisation</label><label><input type="checkbox" value="Disability">Disability</label><label><input type="checkbox" value="Congenital anomaly">Congenital anomaly</label><label><input type="checkbox" value="Medically important">Medically important</label></div></div>
+</div>
+<p class="note">Data is checked live. Move to Causality, then Report.</p></section>
+
+<section id="cod" class="sec card"><h3>MedDRA coding (demo dictionary)</h3><div class="field"><label>Reported term to code (pick a suggestion)</label><input type="text" id="llt" list="lltl" placeholder="e.g. Head pain"></div><datalist id="lltl"></datalist><div id="hier" class="formula" style="margin-top:.6rem"></div><p class="note">Small fictional list for learning. Real MedDRA is licensed and is not embedded here.</p><h3 style="margin-top:1rem">Additional products</h3><div id="prods"></div><div class="btns"><button class="run ghost" id="addp">+ Add product</button></div></section>
+<section id="caus" class="sec card">
+<h3>Naranjo causality algorithm</h3><div id="qs"></div>
+<div style="margin-top:.8rem"><span class="big" id="nsc">0</span> <span class="pill" id="ncat">Doubtful</span></div>
+<p class="note">Imported cases may have Q3 and Q4 auto-prefilled from FAERS fields. Confirm them and write a rationale before this counts as assessed.</p><p class="note">Scores: ≥9 Definite · 5–8 Probable · 1–4 Possible · ≤0 Doubtful</p><div class="field" style="margin-top:.7rem"><label>Assessor rationale</label><input type="text" id="who" placeholder="Why this assessment?"></div></section>
+
+<section id="rep" class="sec">
+<div class="card"><h3>Case completeness</h3><div class="bar"><div id="cbar"></div></div><div id="cmiss" style="font-size:.86rem"></div>
+<p class="note">A valid ICSR needs 4 elements: identifiable patient, identifiable reporter, suspect drug, adverse event.</p></div>
+<div class="card"><h3>Submission readiness</h3><div id="rdy"></div></div>
+<div class="card"><h3>Follow-up management</h3><div id="fu"></div><div class="btns"><button class="run ghost" id="cfu">Copy questions</button></div></div>
+<div class="card"><h3>Signal association</h3><div id="sga"></div></div>
+<div class="card"><h3>Duplicate check</h3><div id="dup"></div></div>
+<div class="card"><h3>Event chronology</h3><div class="tl" id="tl"></div></div>
+<div class="card"><h3>Reporting clock</h3><div id="clock"></div></div>
+<div class="card"><h3>Auto-generated narrative</h3><div class="narr" id="narr"></div>
+<div class="btns"><button class="run" id="copy">Copy narrative</button><button class="run ghost" id="save">Save case to log</button></div><div class="note" id="msg"></div></div>
+</section>
+
+<section id="qc" class="sec"><div class="card"><h3>QC checklist</h3><div class="field" style="max-width:220px"><label>Working as</label><select id="usr"><option>Analyst</option><option>QC reviewer</option><option>Medical reviewer</option></select></div><div id="qcl" class="checks" style="margin-top:.6rem"></div><div id="qcr" style="margin-top:.7rem"></div></div><div class="card"><h3>Audit trail</h3><div class="scroll" id="aud"></div></div></section>
+<section id="log" class="sec card"><h3>Saved cases</h3><div id="mt" style="display:flex;gap:1.5rem;flex-wrap:wrap;margin-bottom:.6rem"></div><div class="flt" id="flt"><input type="text" id="fl_d" placeholder="Drug"><input type="text" id="fl_e" placeholder="Event / PT / SOC"><select id="fl_s"><option value="">Seriousness: any</option><option value="s">Serious</option><option value="n">Non-serious</option></select><select id="fl_o"><option value="">Outcome: any</option><option>Recovered</option><option>Recovering</option><option>Not recovered</option><option>Recovered with sequelae</option><option>Fatal</option><option>Unknown</option></select><select id="fl_g"><option value="">Signal: any</option><option value="l">Signal-linked</option><option value="x">Not linked</option></select><select id="fl_t"><option value="">Status: any</option><option>QC pass</option><option>Follow-up</option><option>In progress</option></select><input type="date" id="fl_1" title="Received from"><input type="date" id="fl_2" title="Received to"></div><div class="scroll" id="logbox"></div>
+<p class="note">Saved in this browser only, on this device.</p></section>
+
+<section id="learn" class="sec card">
+<details open><summary>What is an ICSR?</summary><p>An Individual Case Safety Report is the record of one patient's suspected adverse reaction. It is the basic unit of pharmacovigilance and the input for signal detection like Project 1.</p></details>
+<details><summary>Four minimum criteria</summary><p>Identifiable patient, identifiable reporter, at least one suspect drug, at least one adverse event. Without all four the case is not valid for reporting, but you should follow up.</p></details>
+<details><summary>Seriousness vs severity</summary><p>Seriousness is about outcome or regulatory criteria (death, life-threatening, hospitalisation, disability, congenital anomaly, medically important). Severity is intensity, such as mild or severe. A mild event can be serious; a severe headache may not be.</p></details>
+<details><summary>Expectedness</summary><p>An event is expected if listed in the reference document (label/SmPC, or the Investigator's Brochure in trials). Serious and unexpected is the priority combination.</p></details>
+<details><summary>Day 0 and deadlines</summary><p>The clock starts when the company first receives valid information. Post-marketing serious cases: 15 calendar days. Trial SUSARs (serious, related, unexpected): 7 days if fatal or life-threatening, else 15. Non-serious post-marketing cases go into periodic reports (PBRER/PSUR).</p></details>
+<details><summary>Naranjo scale</summary><p>Ten weighted questions scoring how likely a drug caused the event. It is a structured aid, not proof. WHO-UMC is another common scale.</p></details>
+<details><summary>MedDRA coding</summary><p>Reported terms like "swollen face" are coded to standard MedDRA terms (for example Angioedema) so cases can be grouped and analysed. Signal ↔ case processing: Project 1 finds a statistical signal; the supporting ICSRs are then reviewed one by one here, and the aggregated results go back as evidence for signal assessment. This tool uses a small fictional demo list to show the SOC, HLGT, HLT, PT and LLT levels.</p></details><details><summary>Duplicates, follow-up, QC and audit trail</summary><p>Duplicates are the same event reported twice, found by matching patient, drug, event, dates and reporter. Follow-up asks the reporter for missing details. QC is a second-person check before submission. The audit trail records who changed what and when, which proves traceability.</p></details>
+</section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const Q=[["Previous conclusive reports on this reaction?",1,0,0],["Did the event appear after the drug was given?",2,-1,0],["Did it improve when the drug was stopped or an antagonist given?",1,0,0],["Did it reappear on re-administration?",2,-1,0],["Are there alternative causes that could explain it?",-1,2,0],["Did it reappear with a placebo?",-1,1,0],["Drug detected in blood at toxic concentration?",1,0,0],["Was it more severe with higher dose, or less with lower?",1,0,0],["Similar reaction to same or similar drug before?",1,0,0],["Confirmed by objective evidence?",1,0,0]];
+$('qs').innerHTML=Q.map((q,i)=>`<div class="q">${i+1}. ${q[0]}<div class="opts">${['Yes','No','Unknown'].map((l,j)=>`<label><input type="radio" name="q${i}" value="${j}"${j==2?' checked':''}>${l}</label>`).join('')}</div></div>`).join('');
+const IDS=['pat','rpt','drug','dose','ind','ev','ds','de','eo','d0','out','set','exp','lab','hist','trt','rdt','llt','who','usr','dch','rch'];
+const v=id=>$(id).value.trim();
+const sers=()=>[...document.querySelectorAll('#ser input:checked')].map(x=>x.value);
+const fd=s=>s?new Date(s+'T00:00:00').toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'}):'';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function naranjo(){let s=0;Q.forEach((q,i)=>{const a=+document.querySelector(`input[name=q${i}]:checked`).value;s+=a==0?q[1]:a==1?q[2]:q[3]});
+const c=s>=9?'Definite':s>=5?'Probable':s>=1?'Possible':'Doubtful';return[s,c]}
+function calc(){
+const[s,c]=naranjo();$('nsc').textContent=s;$('ncat').textContent=c;$('ncat').className='pill'+(s>=9?' r':s>=5?' a':'');
+const req=[['Patient',v('pat')],['Reporter',v('rpt')],['Suspect drug',v('drug')],['Adverse event',v('ev')]];
+const got=req.filter(r=>r[1]).length;$('cbar').style.width=got*25+'%';
+const miss=req.filter(r=>!r[1]).map(r=>r[0]);
+$('cmiss').innerHTML=miss.length?`<span class="pill a">Incomplete</span> Missing: ${miss.join(', ')}`:'<span class="pill">Valid ICSR</span> All four minimum criteria present.';
+const S=sers(),ser=S.length>0,pm=v('set')=='pm',unexp=v('exp')=='u',rel=s>=1||S.length&&false;
+let days=null,why='';
+if(pm){if(ser){days=15;why='Serious post-marketing case: expedited report within 15 calendar days.'}else why='Non-serious post-marketing case: no expedited report; include in periodic report (PBRER/PSUR).'}
+else{if(ser&&unexp&&s>=1){days=(S.includes('Death')||S.includes('Life-threatening'))?7:15;why=`Possible SUSAR (serious, unexpected, causality at least Possible): ${days} calendar days.`}else why='Not a SUSAR on current inputs. Report in the annual DSUR, or raise causality/expectedness if that is wrong.'}
+let h=`<p>${why}</p>`;
+if(days){if(!v('d0'))h+='<p><span class="pill a">Set Day 0</span> Enter Day 0 on the Intake tab to start the clock.</p>';
+else{const due=new Date(v('d0')+'T00:00:00');due.setDate(due.getDate()+days);const t=new Date();t.setHours(0,0,0,0);const left=Math.round((due-t)/864e5);
+const cls=left<0?'r':left<=3?'a':'';h+=`<p>Due <b>${fd(due.toISOString().slice(0,10))}</b> · <span class="pill ${cls}">${left<0?Math.abs(left)+' days overdue':left==0?'due today':left+' days left'}</span></p>`}}
+$('clock').innerHTML=h;
+const dur=v('ds')&&v('eo')?Math.round((new Date(v('eo'))-new Date(v('ds')))/864e5):null;
+let n=`${v('pat')||'A patient'} was reported by a${v('rpt')?' '+v('rpt').toLowerCase():' reporter'}${v('d0')?' on '+fd(v('d0')):''}.`;
+n+=` The patient received ${v('drug')||'[suspect drug]'}${v('dose')?' ('+v('dose')+')':''}${v('ind')?' for '+v('ind'):''}${v('ds')?' starting '+fd(v('ds')):''}${v('de')?' and stopping '+fd(v('de')):''}.`;
+n+=` The patient experienced ${v('ev')||'[event]'}${v('eo')?' on '+fd(v('eo')):''}${dur!=null&&dur>=0?' ('+dur+' days after drug start)':''}.`;
+n+=`\n\nSeriousness: ${ser?'Serious ('+S.join(', ')+')':'Non-serious'}. Outcome: ${v('out').toLowerCase()}. Expectedness: ${unexp?'unexpected':'expected'}.\nCausality (Naranjo): ${c}, score ${s}.`;
+$('narr').textContent=n;extra(s,c,S,miss)}
+const DIC="Head pain|Headache|Headaches NEC|Headaches|Nervous system disorders;Migraine|Migraine|Migraine headaches|Headaches|Nervous system disorders;Feeling sick|Nausea|Nausea and vomiting symptoms|GI signs and symptoms|Gastrointestinal disorders;Throwing up|Vomiting|Nausea and vomiting symptoms|GI signs and symptoms|Gastrointestinal disorders;Swollen face|Angioedema|Angioedemas|Allergic conditions|Immune system disorders;Anaphylactic shock|Anaphylactic shock|Anaphylactic responses|Allergic conditions|Immune system disorders;Liver injury|Liver injury|Hepatocellular damage NEC|Hepatic disorders|Hepatobiliary disorders;Skin rash|Rash|Rashes and eruptions NEC|Epidermal conditions|Skin disorders;Dizzy|Dizziness|Neurological signs NEC|Neurological disorders|Nervous system disorders;Tired|Fatigue|Asthenic conditions|General signs NEC|General disorders;Chest pain|Chest pain|Cardiac signs|Cardiac disorders NEC|Cardiac disorders;Low blood sugar|Hypoglycaemia|Hypoglycaemic conditions|Glucose disorders|Metabolism disorders;Stomach bleed|Gastrointestinal haemorrhage|GI haemorrhages NEC|GI haemorrhages|Gastrointestinal disorders".split(';').map(x=>x.split('|'));
+$('lltl').innerHTML=DIC.map(d=>`<option value="${d[0]}">`).join('');
+const QL=['Patient identifiable','Reporter identifiable','Suspect product identified','Adverse event identified','Seriousness assessed','Expectedness assessed','Outcome recorded','Dates validated','Duplicate check completed','MedDRA coding verified','Causality verified','Narrative consistent with data'];
+$('qcl').innerHTML=QL.map((q,i)=>`<label><input type="checkbox" id="qc${i}">${q}</label>`).join('');
+let SRC={};const SL={f:['Source: FAERS',''],i:['Inferred: verify','i'],a:['Auto-prefilled: verify','i'],m:['Manually entered','m']};
+function paintSrc(){document.querySelectorAll('.src').forEach(x=>x.remove());const add=(el,k)=>{if(!el||!SRC[k])return;const s=document.createElement('span');s.className='src '+SL[SRC[k]][1];s.textContent=SL[SRC[k]][0];el.appendChild(s)};
+[...IDS,'ser'].forEach(i=>{const f=$(i)&&$(i).closest('.field');add(f&&f.querySelector('label'),i)});Q.forEach((_,i)=>add(document.querySelectorAll('#qs .q')[i],'q'+i));if($('hier').textContent.startsWith('SOC'))$('hier').insertAdjacentHTML('beforeend','<br><span class="src">Source: demo dictionary</span>')}
+let CUR_SIG=null,SC=[],ST={},curSrc='';try{const z=JSON.parse(localStorage.getItem('icsrsig')||'null');if(z){CUR_SIG=z.sig;SC=z.cases}}catch(e){}
+const sigKey=()=>CUR_SIG?CUR_SIG.drug+' → '+CUR_SIG.event:'';
+let P=[],FQ=[];const AUD=[],PREV={};IDS.forEach(i=>PREV[i]=$(i).value);
+function rp_(){$('prods').innerHTML=P.map((p,i)=>`<div class="prow"><select data-p="${i}" data-k="r"><option${p.r=='Suspect'?' selected':''}>Suspect</option><option${p.r=='Concomitant'?' selected':''}>Concomitant</option></select><input type="text" data-p="${i}" data-k="n" placeholder="Product" value="${esc(p.n)}"><input type="text" data-p="${i}" data-k="d" placeholder="Dose / route" value="${esc(p.d)}"><button class="mini" data-x="${i}">✕</button></div>`).join('')||'<p class="note">The drug on Intake is Suspect #1. Add more suspects or concomitant drugs here.</p>'}
+rp_();$('addp').onclick=()=>{P.push({r:'Concomitant',n:'',d:''});rp_()};
+$('prods').addEventListener('input',e=>{const t=e.target;if(t.dataset.p!=null){P[+t.dataset.p][t.dataset.k]=t.value;calc()}});
+$('prods').onclick=e=>{if(e.target.dataset.x!=null){P.splice(+e.target.dataset.x,1);rp_();calc()}};
+$('cfu').onclick=async()=>{try{await navigator.clipboard.writeText(FQ.map((q,i)=>(i+1)+'. '+q).join('\n'));$('msg').textContent='Questions copied.'}catch(e){}};
+document.addEventListener('change',e=>{const i=e.target.id,nm=e.target.name;if(/^q\d/.test(nm||''))SRC[nm]='m';else if(e.target.closest('#ser'))SRC.ser='m';else if(IDS.includes(i)&&i!='usr')SRC[i]='m';setTimeout(paintSrc,0);if(IDS.includes(i)&&i!='usr'&&PREV[i]!==e.target.value){const lb=e.target.closest('.field');AUD.unshift([new Date().toLocaleString(),$('usr').value,lb?lb.querySelector('label').textContent:i,PREV[i]||'—',e.target.value||'—']);PREV[i]=e.target.value;AUD.length=Math.min(AUD.length,60)}});
+function extra(s,c,S,miss){
+const m=DIC.find(d=>d[0].toLowerCase()==v('llt').toLowerCase());
+$('hier').innerHTML=m?`SOC: ${m[4]}<br>HLGT: ${m[3]}<br>HLT: ${m[2]}<br><b>PT: ${m[1]}</b><br>LLT: ${m[0]}`:'No match yet. Choose from the suggestions.';
+const T=[[v('ds'),'Drug started'],[v('eo'),'First symptoms: '+(v('ev')||'event')],[v('de'),'Drug stopped'],[v('rdt'),'Outcome: '+v('out').toLowerCase()],[v('d0'),'Case received (Day 0)']].filter(x=>x[0]).sort((a,b)=>a[0]<b[0]?-1:1);
+$('tl').innerHTML=T.length?T.map(x=>`<div><b>${fd(x[0])}</b> · ${x[1]}</div>`).join(''):'<p class="note">Enter dates on the Intake tab.</p>';
+const W=[];if(v('ds')&&v('eo')&&v('eo')<v('ds'))W.push('Event onset is before drug start.');if(v('ds')&&v('de')&&v('de')<v('ds'))W.push('Drug stop is before drug start.');if(v('out')=='Fatal'&&!S.includes('Death'))W.push('Outcome is fatal but Death is not ticked.');if(S.includes('Death')&&v('out')!='Fatal')W.push('Death is ticked but outcome is not fatal.');
+const F=[[!v('pat'),'Patient details','What are the patient age, sex or initials?'],[!v('dose'),'Dose','What dose, route and frequency was used?'],[!v('ds'),'Drug start','When was the drug started?'],[!v('eo'),'Onset','On what date did the event start?'],[v('out')=='Unknown','Outcome','Has the patient recovered?'],[!v('lab'),'Labs','Were any tests done? Please share results.'],[!v('hist'),'History','Any relevant medical history or risk factors?'],[!v('trt'),'Treatment','Was any treatment given for the event?'],[v('drug')&&v('dch')=='Unknown','Dechallenge','Was the drug stopped, and did the event improve?']].filter(x=>x[0]);
+FQ=F.map(x=>x[2]);
+$('fu').innerHTML=F.length?`<span class="pill a">Follow-up required</span> <span class="note">${F.length} item(s) missing</span><ol>${F.map(x=>`<li>${x[2]}</li>`).join('')}</ol>`:'<span class="pill">No follow-up needed</span>';
+const cur={pat:v('pat'),drug:v('drug'),ev:v('ev'),eo:v('eo'),rpt:v('rpt')},Wt={pat:20,drug:25,ev:25,eo:15,rpt:15};
+const D=LOG.map(o=>{let x=0;for(const k in Wt)if(cur[k]&&cur[k].toLowerCase()==(o.f[k]||'').toLowerCase())x+=Wt[k];return[o.id,x]}).filter(x=>x[1]>=60);
+$('dup').innerHTML=D.length?D.map(x=>`<p><span class="pill r">${x[1]}% similar</span> ${x[0]}</p>`).join('')+'<p class="note">Review, then tick “Duplicate check completed” in QC.</p>':'<span class="pill">No likely duplicates</span> <span class="note">Compared with saved cases on patient, drug, event, onset and reporter.</span>';
+const done=QL.filter((_,i)=>$('qc'+i).checked).length,pass=done==QL.length&&!W.length;
+$('qcr').innerHTML=`<span class="pill ${pass?'':'a'}">${pass?'QC pass':'Corrections required'}</span> <span class="note">${done}/${QL.length} checked</span>${W.length?'<ol>'+W.map(w=>`<li>${w}</li>`).join('')+'</ol>':''}`;
+const caus=!!v('who')&&Q.some((_,i)=>document.querySelector(`input[name=q${i}]:checked`).value!='2');
+const R=[['Valid ICSR (4 criteria)',!miss.length],['MedDRA coded',!!m],['Day 0 set',!!v('d0')],['Causality confirmed with rationale',caus],['Follow-up items closed',!F.length],['Data consistent',!W.length],['QC passed',pass]];
+const pc=Math.round(R.filter(x=>x[1]).length/R.length*100);
+$('rdy').innerHTML=`<div class="big">${pc}%</div><div class="bar"><div style="width:${pc}%"></div></div>`+R.map(x=>`<div style="font-size:.86rem">${x[1]?'🟢':'🔴'} ${x[0]}</div>`).join('');
+const fl=[['Intake',!miss.length],['Coding',!!m],['Causality',caus],['Follow-up',!F.length],['QC',pass],['Submission',pc==100]];
+$('flow').innerHTML=fl.map((x,i)=>{const a=x[1]?'g':(i==0||fl[i-1][1])?'y':'';return`<span class="${a}">${x[1]?'🟢':a?'🟡':'⚪'} ${x[0]}</span>`}).join('');
+$('aud').innerHTML=AUD.length?'<table><tr><th>Time</th><th>User</th><th>Field</th><th>Previous</th><th>New</th></tr>'+AUD.map(a=>'<tr>'+a.map(x=>`<td>${esc(x)}</td>`).join('')+'</tr>').join('')+'</table>':'<p class="note">Changes made on the Intake tab appear here.</p>';
+const inc=!!CUR_SIG&&v('drug').toLowerCase().includes(CUR_SIG.drug.toLowerCase())&&[v('ev'),m?m[1]:''].some(x=>x&&x.toLowerCase()==CUR_SIG.event.toLowerCase());
+ST={pass,pc,fu:F.length,pt:m?m[1]:'',soc:m?m[4]:'',inc};
+$('sga').innerHTML=CUR_SIG?`<div style="font-size:.86rem">Drug: <b>${esc(v('drug')||'—')}</b><br>Event: <b>${esc(v('ev')||'—')}</b><br>MedDRA PT: <b>${esc(ST.pt||'not coded')}</b><br>Signal: <b>${esc(sigKey())}</b><br>Contribution: <span class="pill ${inc?'':'a'}">${inc?'Included':'Not matching this signal'}</span></div>`:'<p class="note">No signal loaded. Use the Signal tab to load supporting cases from Project 1.</p>';
+$('srcb').style.display=curSrc?'':'none';$('srcb').textContent=curSrc?`Imported FAERS report ${curSrc} · ${sigKey()}. Verify each field, complete missing details, then save.`:'';
+let n=$('narr').textContent;if(m)n+=`\nMedDRA: ${m[1]} (${m[4]}).`;const pr=P.filter(p=>p.n);if(pr.length)n+='\nOther products: '+pr.map(p=>`${p.n} (${p.r.toLowerCase()}${p.d?', '+p.d:''})`).join('; ')+'.';$('narr').textContent=n}
+document.addEventListener('input',calc);document.addEventListener('change',calc);
+$('tabs').onclick=e=>{const b=e.target.closest('.tab');if(!b)return;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x==b));document.querySelectorAll('.sec').forEach(x=>x.classList.toggle('on',x.id==b.dataset.t));if(b.dataset.t=='log')renderLog();window.scrollTo({top:0,behavior:'smooth'})};
+$('copy').onclick=async()=>{try{await navigator.clipboard.writeText($('narr').textContent);$('msg').textContent='Copied.'}catch(e){$('msg').textContent='Copy failed. Select the text manually.'}};
+let LOG=[];try{LOG=JSON.parse(localStorage.getItem('icsrlog')||'[]')}catch(e){}
+const persist=()=>{try{localStorage.setItem('icsrlog',JSON.stringify(LOG))}catch(e){}};
+$('save').onclick=()=>{const o={id:'CASE-'+String(LOG.length+1).padStart(3,'0'),f:{},s:sers(),pv:Object.assign({},SRC),P:JSON.parse(JSON.stringify(P)),k:QL.map((_,i)=>$('qc'+i).checked),q:Q.map((_,i)=>document.querySelector(`input[name=q${i}]:checked`).value)};IDS.forEach(i=>o.f[i]=$(i).value);const[sc,c]=naranjo();o.sc=sc;o.c=c;o.pt=ST.pt;o.soc=ST.soc;o.st=ST.pass?'QC pass':ST.fu?'Follow-up':'In progress';o.sig=ST.inc?sigKey():'';o.src=curSrc||'';const ix=o.src?LOG.findIndex(x=>x.src==o.src):-1;if(ix>=0){o.id=LOG[ix].id;LOG[ix]=o}else LOG.push(o);persist();$('msg').textContent='Saved as '+o.id+'.';renderSig()};
+function renderLog(){
+const[a,b,s,o_,g,t,d1,d2]=['fl_d','fl_e','fl_s','fl_o','fl_g','fl_t','fl_1','fl_2'].map(i=>$(i).value.toLowerCase());
+const R=LOG.map((o,i)=>[o,i]).filter(([o])=>{const f=o.f;return(!a||(f.drug||'').toLowerCase().includes(a))&&(!b||((f.ev||'')+' '+(o.pt||'')+' '+(o.soc||'')).toLowerCase().includes(b))&&(!s||(s=='s')==(o.s.length>0))&&(!o_||(f.out||'').toLowerCase()==o_)&&(!g||(g=='l')==!!o.sig)&&(!t||(o.st||'').toLowerCase()==t)&&(!d1||(f.d0||'')>=d1)&&(!d2||(f.d0||'')<=d2)});
+const L=R.map(x=>x[0]);
+$('mt').innerHTML=[['Cases',L.length],['Serious',L.filter(o=>o.s.length).length],['Fatal',L.filter(o=>o.f.out=='Fatal').length],['Hospitalised',L.filter(o=>o.s.includes('Hospitalisation')).length],['Outcome unknown',L.filter(o=>o.f.out=='Unknown').length]].map(x=>`<div><div class="big">${x[1]}</div><div class="note" style="margin:0">${x[0]}</div></div>`).join('');
+$('logbox').innerHTML=R.length?`<table><tr><th>ID</th><th>Drug</th><th>Event / PT</th><th>Serious</th><th>Causality</th><th>Signal</th><th>Status</th><th></th></tr>${R.map(([o,i])=>`<tr><td>${o.id}</td><td>${esc(o.f.drug||'—')}</td><td>${esc(o.f.ev||'—')}${o.pt?' / '+esc(o.pt):''}</td><td>${o.s.length?'Yes':'No'}</td><td>${o.c} (${o.sc})</td><td>${o.sig?'🔗 '+esc(o.sig):'—'}</td><td>${o.st||'—'}</td><td><button class="mini" data-l="${i}">Load</button><button class="mini" data-d="${i}">Delete</button></td></tr>`).join('')}</table>`:'<p class="note">No cases match.</p>'}
+['input','change'].forEach(ev=>$('flt').addEventListener(ev,renderLog));
+function fbData(){const k=sigKey(),C=LOG.filter(o=>o.sig&&o.sig==k);return{sig:{drug:CUR_SIG.drug,event:CUR_SIG.event},n:C.length,total:SC.length,ser:C.filter(o=>o.s.length).length,fatal:C.filter(o=>o.f.out=='Fatal').length,caus:C.filter(o=>o.sc>=1).length,prob:C.filter(o=>o.sc>=5).length,dch:C.filter(o=>o.f.dch=='Positive').length,rch:C.filter(o=>['Positive','Negative'].includes(o.f.rch)).length,qc:C.filter(o=>o.st=='QC pass').length}}
+function blank(){SRC={};IDS.forEach(i=>{const e=$(i);e.tagName=='SELECT'?e.selectedIndex=0:e.value=''});document.querySelectorAll('#ser input').forEach(x=>x.checked=false);Q.forEach((_,i)=>document.querySelector(`input[name=q${i}][value="2"]`).checked=true);QL.forEach((_,i)=>$('qc'+i).checked=false);P=[];rp_();curSrc=''}
+function renderSig(){
+if(!CUR_SIG){$('sgh').innerHTML='<p class="note">No signal loaded. In Project 1, click 🔍 on a signal, choose “Copy case set for Project 2”, then paste it below.</p>';$('sgt').innerHTML='';$('sgm').innerHTML='';return}
+const k=sigKey(),dn=c=>LOG.some(o=>o.src==c.id&&o.sig==k),done=SC.filter(dn).length,g=CUR_SIG,fb=fbData();
+$('sgh').innerHTML=`<div class="formula"><b>Signal investigation: ${esc(g.drug)} — ${esc(g.event)}</b><br>Supporting cases loaded: ${SC.length}${g.a?(SC.length<g.a?' (sample of '+g.a+' in FAERS, not the full set)':' (all in FAERS)'):''} · PRR ${g.prr} · ROR ${g.ror}</div><div class="bar"><div style="width:${SC.length?done/SC.length*100:0}%"></div></div><p class="note">${done} of ${SC.length} processed</p>`;
+$('sgm').innerHTML=[['Processed',fb.n],['Serious',fb.ser],['Possible+ causality',fb.caus],['Positive dechallenge',fb.dch],['Rechallenge info',fb.rch],['QC pass',fb.qc]].map(x=>`<div><div class="big">${x[1]}</div><div class="note" style="margin:0">${x[0]}</div></div>`).join('');
+$('sgt').innerHTML='<table><tr><th>Report</th><th>Received</th><th>Patient</th><th>Serious</th><th>Outcome</th><th></th></tr>'+SC.map((c,i)=>`<tr><td>${esc(c.id)}</td><td>${esc(c.d)}</td><td>${esc(c.sex||'?')} ${c.age||'?'}</td><td>${c.ser?'Yes':'No'}</td><td>${esc(c.out)}</td><td>${dn(c)?'✅ ':''}<button class="mini" data-c="${i}">Process</button></td></tr>`).join('')+'</table>'}
+$('sgload').onclick=()=>{try{const o=JSON.parse($('sgin').value.trim().replace(/^PVCASES:/,''));if(!o.sig||!Array.isArray(o.cases))throw 0;CUR_SIG=o.sig;SC=o.cases;try{localStorage.setItem('icsrsig',JSON.stringify(o))}catch(e){}$('sgmsg').textContent='Loaded '+SC.length+' cases.';renderSig();calc()}catch(e){$('sgmsg').textContent='That does not look like a case set from Project 1.'}};
+$('sgfb').onclick=async()=>{if(!CUR_SIG){$('sgmsg').textContent='Load a signal first.';return}const t='PVFEEDBACK:'+JSON.stringify(fbData()),bx=$('sgout');bx.style.display='';bx.value=t;try{await navigator.clipboard.writeText(t);$('sgmsg').textContent='Feedback copied. Paste it into Project 1.'}catch(e){bx.select();$('sgmsg').textContent='Select and copy the text above.'}};
+$('sgt').onclick=e=>{const b=e.target.closest('[data-c]');if(!b)return;const c=SC[+b.dataset.c];blank();
+$('pat').value=[c.sex,c.age?c.age+' y':''].filter(Boolean).join(', ');$('drug').value=CUR_SIG.drug;$('ev').value=c.pt;$('ind').value=c.ind||'';
+if((c.d||'').length==8)$('d0').value=c.d.slice(0,4)+'-'+c.d.slice(4,6)+'-'+c.d.slice(6);
+$('out').value={'Recovered/resolved':'Recovered','Recovering/resolving':'Recovering'}[c.out]||c.out;
+document.querySelectorAll('#ser input').forEach(x=>x.checked=(c.crit||[]).includes(x.value));
+const rec=/^Recover/.test(c.out);$('dch').value=c.act=='Drug withdrawn'?(rec?'Positive':c.out=='Not recovered'?'Negative':'Unknown'):'Unknown';
+$('rch').value=(c.rec||'').startsWith('Reaction recurred')?'Positive':(c.rec||'').startsWith('Reaction did not')?'Negative':'Unknown';
+const sq=(i,x)=>document.querySelector(`input[name=q${i}][value="${x}"]`).checked=true;sq(2,$('dch').value=='Positive'?0:$('dch').value=='Negative'?1:2);sq(3,$('rch').value=='Positive'?0:$('rch').value=='Negative'?1:2);
+['pat','drug','ev','ind','d0','out','ser'].forEach(k=>SRC[k]='f');SRC.dch=SRC.rch='i';SRC.q2=SRC.q3='a';SRC.set=undefined;P=(c.con||[]).filter(Boolean).map(n=>({r:'Concomitant',n,d:''}));rp_();curSrc=c.id;IDS.forEach(i=>PREV[i]=$(i).value);calc();paintSrc();document.querySelector('[data-t=intake]').click()};
+renderSig();if(CUR_SIG)setTimeout(()=>document.querySelector('[data-t=sg]').click(),0);
+$('logbox').onclick=e=>{const b=e.target;if(b.dataset.d!=null){LOG.splice(+b.dataset.d,1);persist();renderLog();renderSig()}
+if(b.dataset.l!=null){const o=LOG[+b.dataset.l];IDS.forEach(i=>{if(o.f[i]!=null)$(i).value=o.f[i]});IDS.forEach(i=>PREV[i]=$(i).value);P=o.P||[];rp_();QL.forEach((_,i)=>$('qc'+i).checked=!!(o.k&&o.k[i]));document.querySelectorAll('#ser input').forEach(x=>x.checked=o.s.includes(x.value));o.q.forEach((a,i)=>document.querySelector(`input[name=q${i}][value="${a}"]`).checked=true);curSrc=o.src||'';SRC=Object.assign({},o.pv||{});calc();paintSrc();document.querySelector('[data-t=intake]').click()}};
+calc();
+</script></body></html>
